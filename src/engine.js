@@ -10,15 +10,33 @@ initMap();
 
 let globalScore = 0;
 let gameState = 'START'; // START, PLAY, GAMEOVER
-let player = new Player(13.5, 23); // starting cell
+let player;
+let blinky, pinky, inky, clyde;
+let ghosts = [];
 
-// Instantiate ghosts (startX, startY, color, type, scatterTarget)
-let blinky = new Ghost(13.5, 11, '#ff0000', 'BLINKY', {col: 25, row: 0});
-let pinky = new Ghost(13.5, 14, '#ffb8ff', 'PINKY', {col: 2, row: 0});
-let inky = new Ghost(11.5, 14, '#00ffff', 'INKY', {col: 27, row: 35});
-let clyde = new Ghost(15.5, 14, '#ffb852', 'CLYDE', {col: 0, row: 35});
+export function resetGame() {
+    initMap();
+    globalScore = 0;
+    
+    // Spawn exactly on integer tiles to align with % 8 === 0 grid logic
+    player = new Player(14, 26); 
+    
+    blinky = new Ghost(13, 14, '#ff0000', 'BLINKY', {col: 25, row: 0});
+    pinky = new Ghost(13, 17, '#ffb8ff', 'PINKY', {col: 2, row: 0});
+    inky = new Ghost(11, 17, '#00ffff', 'INKY', {col: 27, row: 35});
+    clyde = new Ghost(15, 17, '#ffb852', 'CLYDE', {col: 0, row: 35});
+    
+    ghosts = [blinky, pinky, inky, clyde];
+    
+    globalTimer = 0;
+    currentPhaseIndex = 0;
+    gameState = 'PLAY';
+    
+    const ui = document.getElementById('restart-ui');
+    if(ui) ui.style.display = 'none';
+}
 
-let ghosts = [blinky, pinky, inky, clyde];
+resetGame();
 
 // Global Timer Strategy (Scatter vs Chase) approx frame counts
 let globalTimer = 0;
@@ -35,8 +53,10 @@ let modePhases = [
 let currentPhaseIndex = 0;
 
 window.addEventListener('keydown', (e) => {
-    if (gameState === 'START' && e.code === 'Space') {
-        gameState = 'PLAY';
+    if (e.code === 'Space') {
+        if (gameState === 'START' || gameState === 'GAMEOVER') {
+            resetGame();
+        }
     }
 });
 
@@ -77,6 +97,8 @@ function checkCollisions() {
             } else {
                 // Death
                 gameState = 'GAMEOVER';
+                const ui = document.getElementById('restart-ui');
+                if(ui) ui.style.display = 'block';
             }
         }
     });
@@ -159,6 +181,9 @@ function loop() {
     render();
     requestAnimationFrame(loop);
 }
+
+// Access reset from HTML button
+window.resetGame = resetGame;
 
 // Start
 requestAnimationFrame(loop);

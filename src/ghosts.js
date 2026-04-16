@@ -141,34 +141,68 @@ export class Ghost {
     }
 
     render(ctx) {
+        // Pixel Art Ghost (14x14)
+        const ghostSprite = [
+            "    XXXXXX    ",
+            "  XXXXXXXXXX  ",
+            " XXXXXXXXXXXX ",
+            " XXXXXXXXXXXX ",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXX",
+            "XXXX  XX  XXXX",
+            "XX          XX"
+        ];
+
         ctx.fillStyle = this.color;
         if (this.mode === 'FRIGHTENED') {
             ctx.fillStyle = this.frightTimer < 120 && (this.frightTimer % 20 < 10) ? '#fff' : '#00f';
         }
+
+        let offset = -3; // 14x14 sprite centered on 8x8 tile
         
-        ctx.beginPath();
-        let hc = this.x + TILE_SIZE / 2;
-        let hy = this.y + TILE_SIZE / 2;
-        ctx.arc(hc, hy, TILE_SIZE / 2, Math.PI, 0); // Head dome
-        ctx.lineTo(this.x + TILE_SIZE, this.y + TILE_SIZE);
-        // Scalloped bottom
-        ctx.lineTo(this.x + (TILE_SIZE * 0.75), this.y + TILE_SIZE - 2);
-        ctx.lineTo(this.x + (TILE_SIZE * 0.5), this.y + TILE_SIZE);
-        ctx.lineTo(this.x + (TILE_SIZE * 0.25), this.y + TILE_SIZE - 2);
-        ctx.lineTo(this.x, this.y + TILE_SIZE);
-        ctx.fill();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        for (let r = 0; r < ghostSprite.length; r++) {
+            for (let c = 0; c < ghostSprite[r].length; c++) {
+                if (ghostSprite[r][c] === 'X') {
+                    ctx.fillRect(offset + c, offset + r, 1, 1);
+                }
+            }
+        }
 
         if (this.mode !== 'FRIGHTENED') {
-            // Eyes Directional
+            // White of eyes
             ctx.fillStyle = '#fff';
             let ex = 0; let ey = 0;
-            if (this.dir==='UP') ey = -2;
-            if (this.dir==='DOWN') ey = 2;
-            if (this.dir==='LEFT') ex = -2;
-            if (this.dir==='RIGHT') ex = 2;
+            if (this.dir === 'UP') ey = -2;
+            if (this.dir === 'DOWN') ey = 2;
+            if (this.dir === 'LEFT') ex = -2;
+            if (this.dir === 'RIGHT') ex = 2;
+
+            // Draw eye whites (2x2 blocks)
+            ctx.fillRect(offset + 3 + ex, offset + 4 + ey, 3, 4);
+            ctx.fillRect(offset + 8 + ex, offset + 4 + ey, 3, 4);
+
+            // Pupils
+            ctx.fillStyle = '#00f';
+            ctx.fillRect(offset + 3 + ex * 1.5, offset + 5 + ey * 1.5, 2, 2);
+            ctx.fillRect(offset + 8 + ex * 1.5, offset + 5 + ey * 1.5, 2, 2);
+        } else {
+            // Frightened face (simple mouth/eyes)
+            ctx.fillStyle = '#ffb8ae';
+            ctx.fillRect(offset + 4, offset + 5, 2, 2);
+            ctx.fillRect(offset + 8, offset + 5, 2, 2);
             
-            ctx.fillRect(this.x + 1 + ex, this.y + 2 + ey, 2, 2);
-            ctx.fillRect(this.x + 5 + ex, this.y + 2 + ey, 2, 2);
+            ctx.fillRect(offset + 3, offset + 10, 8, 1);
         }
+
+        ctx.restore();
     }
 }

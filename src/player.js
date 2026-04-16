@@ -97,6 +97,36 @@ export default class Player {
     }
 
     render(ctx) {
+        let sprite = this.mouthOpen > 0.3 ? [
+            "    XXXXX    ",
+            "  XXXXXXXXX  ",
+            " XXXXXXXXXXX ",
+            "XXXXXXXXXXXXX",
+            "XXXXXX       ",
+            "XXXXX        ",
+            "XXXX         ",
+            "XXXXX        ",
+            "XXXXXX       ",
+            "XXXXXXXXXXXXX",
+            " XXXXXXXXXXX ",
+            "  XXXXXXXXX  ",
+            "    XXXXX    "
+        ] : [
+            "    XXXXX    ",
+            "  XXXXXXXXX  ",
+            " XXXXXXXXXXX ",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            "XXXXXXXXXXXXX",
+            " XXXXXXXXXXX ",
+            "  XXXXXXXXX  ",
+            "    XXXXX    "
+        ];
+
         ctx.save();
         ctx.translate(this.x + TILE_SIZE/2, this.y + TILE_SIZE/2);
         
@@ -107,12 +137,15 @@ export default class Player {
         ctx.rotate(rotation);
 
         ctx.fillStyle = '#FFFF00'; // Pacman Yellow
-        ctx.beginPath();
-        // Math.PI * mouthOpen creates the pie slice
-        ctx.arc(0, 0, (TILE_SIZE/2) + 1, this.mouthOpen, Math.PI * 2 - this.mouthOpen);
-        ctx.lineTo(0, 0);
-        ctx.fill();
-
+        
+        let offset = -6; // center the 13x13 sprite
+        for (let r = 0; r < sprite.length; r++) {
+            for (let c = 0; c < sprite[r].length; c++) {
+                if (sprite[r][c] === 'X') {
+                    ctx.fillRect(offset + c, offset + r, 1, 1);
+                }
+            }
+        }
         ctx.restore();
     }
 }
