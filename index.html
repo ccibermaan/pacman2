@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Antigravity Remake</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Original resolution 224x288, rendered via canvas and scaled via css -->
+        <canvas id="gameCanvas" width="224" height="288"></canvas>
+    </div>
+
+    <!-- We use module scripts to separate logic natively -->
+    <script type="module" src="src/engine.js"></script>
+</body>
+</html>
