@@ -48,6 +48,7 @@ export const TILE_SIZE = 8;
 export const matrix = [];
 
 export function initMap() {
+    matrix.length = 0; // Clear for restarts
     for (let r = 0; r < mapLayout.length; r++) {
         let row = [];
         for (let c = 0; c < mapLayout[r].length; c++) {

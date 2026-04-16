@@ -10,7 +10,7 @@ export class Ghost {
         this.type = type; // 'BLINKY', 'PINKY', 'INKY', 'CLYDE'
         this.scatterTarget = scatterTarget; // {col, row}
         
-        this.baseSpeed = 0.8;
+        this.baseSpeed = 1;
         this.vx = -this.baseSpeed;
         this.vy = 0;
         this.dir = 'LEFT';
@@ -114,8 +114,8 @@ export class Ghost {
 
             if (chosenMove) {
                 this.dir = chosenMove.dir;
-                this.vx = chosenMove.x * (isFrightened ? 0.4 : this.baseSpeed);
-                this.vy = chosenMove.y * (isFrightened ? 0.4 : this.baseSpeed);
+                this.vx = chosenMove.x * (isFrightened ? 0.5 : this.baseSpeed);
+                this.vy = chosenMove.y * (isFrightened ? 0.5 : this.baseSpeed);
             } else {
                 // Dead end (shouldn't happen on pacman maps unless eaten/in ghost house)
                 this.vx = 0; this.vy = 0;
