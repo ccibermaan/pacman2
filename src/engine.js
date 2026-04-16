@@ -14,6 +14,20 @@ let player;
 let blinky, pinky, inky, clyde;
 let ghosts = [];
 
+// Global Timer Strategy (Scatter vs Chase) approx frame counts
+let globalTimer = 0;
+let modePhases = [
+    { mode: 'SCATTER', duration: 420 }, // 7 sec
+    { mode: 'CHASE', duration: 1200 },  // 20 sec
+    { mode: 'SCATTER', duration: 420 },
+    { mode: 'CHASE', duration: 1200 },
+    { mode: 'SCATTER', duration: 300 }, // 5 sec
+    { mode: 'CHASE', duration: 1200 },
+    { mode: 'SCATTER', duration: 300 },
+    { mode: 'CHASE', duration: Infinity }
+];
+let currentPhaseIndex = 0;
+
 export function resetGame() {
     initMap();
     globalScore = 0;
@@ -36,21 +50,7 @@ export function resetGame() {
     if(ui) ui.style.display = 'none';
 }
 
-resetGame();
 
-// Global Timer Strategy (Scatter vs Chase) approx frame counts
-let globalTimer = 0;
-let modePhases = [
-    { mode: 'SCATTER', duration: 420 }, // 7 sec
-    { mode: 'CHASE', duration: 1200 },  // 20 sec
-    { mode: 'SCATTER', duration: 420 },
-    { mode: 'CHASE', duration: 1200 },
-    { mode: 'SCATTER', duration: 300 }, // 5 sec
-    { mode: 'CHASE', duration: 1200 },
-    { mode: 'SCATTER', duration: 300 },
-    { mode: 'CHASE', duration: Infinity }
-];
-let currentPhaseIndex = 0;
 
 window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
@@ -186,4 +186,5 @@ function loop() {
 window.resetGame = resetGame;
 
 // Start
+resetGame();
 requestAnimationFrame(loop);
